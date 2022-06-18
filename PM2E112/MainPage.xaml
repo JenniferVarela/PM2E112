@@ -7,15 +7,18 @@
         <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
             <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
         </Frame>
-
+        
+        <!--FOTO-->
         <Image x:Name="fotoSitio" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="Aqua" />
         <Button Text="Tomar Foto" x:Name="btnFoto" Clicked="btnFoto_Clicked"/>
+        <!--DATOS-->
         <Label Text="Latitud"/>
         <Entry x:Name="txtLat"/>
         <Label Text="Longitud"/>
         <Entry x:Name="txtLon"/>
         <Label Text="Descripcion"/>
         <Entry x:Name="txtDescripcion"/>
+        <!--BONOTES-->
         <Button Text="Agregar" x:Name="btnAdd" Clicked="btnAdd_Clicked"/>
         <Button Text="Listar Sitios" x:Name="btnList" Clicked="btnList_Clicked"/>
         <Button Text="Salir" x:Name="btnSalir" Clicked="btnSalir_Clicked"/>
