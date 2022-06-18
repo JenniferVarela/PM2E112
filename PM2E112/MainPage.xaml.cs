@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Plugin.Media;
+using Xamarin.Essentials;
+using Xamarin.Forms.Maps;
 
 namespace PM2E112
 {
@@ -50,6 +52,23 @@ namespace PM2E112
                     return fotografia.GetStream();
                 });
             }
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+
+           var location = await Geolocation.GetLastKnownLocationAsync();
+
+           if (location != null)
+           {
+            //    await DisplayAlert("AVISO", "lATITUD" + location.Latitude + " Longitude" + location.Longitude, "OK");
+                var lon = location.Longitude;
+                var lat = location.Latitude;
+              
+                txtLat.Text = lat.ToString();
+                txtLon.Text = lon.ToString();
+           }  
         }
     }
 }

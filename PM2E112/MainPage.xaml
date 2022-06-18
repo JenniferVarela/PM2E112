@@ -13,9 +13,9 @@
         <Button Text="Tomar Foto" x:Name="btnFoto" Clicked="btnFoto_Clicked"/>
         <!--DATOS-->
         <Label Text="Latitud"/>
-        <Entry x:Name="txtLat"/>
+        <Entry x:Name="txtLat" IsReadOnly="true" TextTransform="None"/>
         <Label Text="Longitud"/>
-        <Entry x:Name="txtLon"/>
+        <Entry x:Name="txtLon" IsReadOnly="true" TextTransform="None"/>
         <Label Text="Descripcion"/>
         <Entry x:Name="txtDescripcion"/>
         <!--BONOTES-->
