@@ -33,5 +33,10 @@ namespace PM2E112.Controller
             }
 
         }
+
+        public Task<List<Sitios>> getListSitio()
+        {
+            return dbase.Table<Sitios>().ToListAsync();//se convierte el resultado a una lista.
+        }
     }
 }

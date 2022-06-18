@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PM2E112.Views.ListSitios">
+    
+    <ContentPage.Content>
+        <StackLayout>
+
+            <ListView x:Name="Lista" ItemTapped="ListSitio_ItemTapped" SelectionMode="None">
+                <!--elemeto tocado para usar en cualquier momento-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!--<ViewCell.ContextActions>
+                                --><!--se declaran menus--><!--
+                                <MenuItem Clicked="MenuItem_Clicked" CommandParameter="{Binding .}" Text="Ir a mapa"/>
+                                <MenuItem Clicked="MenuItem2_Clicked" CommandParameter="{Binding .}" Text="Actualizar"/>
+                                <MenuItem Clicked="MenuItem3_Clicked" CommandParameter="{Binding .}" Text="Eliminar"/>
+                            </ViewCell.ContextActions>-->
+                            <Grid>
+                                <Label Grid.Column="0" Text="{Binding id}"/>
+                                <Label Grid.Column="1" Text="{Binding latitud}"/>
+                                <Label Grid.Column="3" Text="{Binding longitud}"/>
+                                <Label Grid.Column="4" Text="{Binding descripcion}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

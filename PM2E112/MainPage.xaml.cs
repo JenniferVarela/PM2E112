@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Plugin.Media;
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
+using PM2E112.Views;
 
 namespace PM2E112
 {
@@ -42,9 +43,9 @@ namespace PM2E112
 
         }
 
-        private void btnList_Clicked(object sender, EventArgs e)
+        private async void btnList_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new ListSitios());
         }
 
         private void btnSalir_Clicked(object sender, EventArgs e)
