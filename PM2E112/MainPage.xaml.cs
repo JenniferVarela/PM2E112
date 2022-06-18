@@ -18,8 +18,27 @@ namespace PM2E112
             InitializeComponent();
         }
 
-        private void btnAdd_Clicked(object sender, EventArgs e)
+        private async void btnAdd_Clicked(object sender, EventArgs e)
         {
+            var sitio = new Models.Sitios
+            {
+                id = 0,
+                latitud = txtLat.Text,
+                longitud = txtLon.Text,
+                descripcion = txtDescripcion.Text,
+                //foto
+            };
+
+            //await DisplayAlert("Aviso", "Sitio Adicionado"+sitio, "OK");
+            var result = await App.DBase.SitioSave(sitio);
+            if (result > 0)//se usa como una super clase
+            {
+                await DisplayAlert("Aviso", "Sitio Adicionado",  "OK");
+            }
+            else
+            {
+                await DisplayAlert("Aviso", "Error al Registrar",  "OK");
+            }
 
         }
 
