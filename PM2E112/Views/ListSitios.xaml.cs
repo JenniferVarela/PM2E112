@@ -10,6 +10,7 @@ using PM2E112.Models;
 using System.Diagnostics;
 using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
+using Xamarin.Essentials;
 
 namespace PM2E112.Views
 {
@@ -75,17 +76,44 @@ namespace PM2E112.Views
         private async void IrMapa_Clicked(object sender, EventArgs e)
         {
             var idSitio = (Sitios)(sender as MenuItem).CommandParameter;
-            await DisplayAlert("Aviso", "sitio " + idSitio, "ok");
-            //var result = await App.DBase.getSitio(Int32.Parse(idSitio));
-
+            //await DisplayAlert("Aviso", "sitio " + idSitio, "ok");
+     
             bool answer = await DisplayAlert("AVISO", "¿Quiere ir al mapa?", "Si", "No");
             Debug.WriteLine("Answer: " + answer);
+
             if (answer == true)
             {
+                try
+                {
+                    var georequest = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
+                    var tokendecancelacion = new System.Threading.CancellationTokenSource();
+                    var location = await Geolocation.GetLocationAsync(georequest, tokendecancelacion.Token);
+                    if (location != null)
+                    {
 
-                Map map = new Map();
-                //map.BindingContext = mi.CommandParameter.ToString();
-                await Navigation.PushAsync(map);
+                        Map map = new Map();
+                        //map.BindingContext = mi.CommandParameter.ToString();
+                        await Navigation.PushAsync(map);
+                    }
+                }
+                catch (FeatureNotSupportedException fnsEx)
+                {
+                    await DisplayAlert("Advertencia", "Este dispositivo no soporta GPS" + fnsEx, "Ok");
+                }
+                catch (FeatureNotEnabledException fneEx)
+                {
+                    await DisplayAlert("Advertencia", "Error de Dispositivo, validar si su GPS esta activo", "Ok");
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
+
+                }
+                catch (PermissionException pEx)
+                {
+                    await DisplayAlert("Advertencia", "Sin Permisos de Geolocalizacion" + pEx, "Ok");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Advertencia", "Sin Ubicacion " + ex, "Ok");
+                }  
             };
         }
     }

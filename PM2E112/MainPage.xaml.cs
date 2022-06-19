@@ -10,7 +10,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using PM2E112.Views;
 using System.IO;
-
+using static Xamarin.Essentials.Permissions;
 
 namespace PM2E112
 {
@@ -20,8 +20,44 @@ namespace PM2E112
         {
             InitializeComponent();
         }
+        public async void LoadCoord()
+        {
+            try
+            {
+                var georequest = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
+                var tokendecancelacion = new System.Threading.CancellationTokenSource();
+                var location = await Geolocation.GetLocationAsync(georequest, tokendecancelacion.Token);
+                if (location != null)
+                {
 
-        Plugin.Media.Abstractions.MediaFile Filefoto = null;
+                    var lon = location.Longitude;
+                    var lat = location.Latitude;
+
+                    txtLat.Text = lat.ToString();
+                    txtLon.Text = lon.ToString();
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                await DisplayAlert("Advertencia", "Este dispositivo no soporta GPS" + fnsEx, "Ok");
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                await DisplayAlert("Advertencia", "Error de Dispositivo, validar si su GPS esta activo", "Ok");
+                System.Diagnostics.Process.GetCurrentProcess().Kill(); 
+
+            }
+            catch (PermissionException pEx)
+            {
+                await DisplayAlert("Advertencia", "Sin Permisos de Geolocalizacion" + pEx, "Ok");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Advertencia", "Sin Ubicacion " + ex, "Ok");
+            }
+        }
+
+    Plugin.Media.Abstractions.MediaFile Filefoto = null;
 
         private Byte[] ConvertImageToByteArray()
         {
@@ -43,23 +79,19 @@ namespace PM2E112
             if(Filefoto ==null)
             {
                 await this.DisplayAlert("Advertencia", "Debe tomar una foto", "OK");
-            }
-            else if (string.IsNullOrEmpty(txtLat.Text))
-            {
-                await this.DisplayAlert("Advertencia", "El campo del Latitud es obligatorio.", "OK");
-              
-            }
-            else if (string.IsNullOrEmpty(txtLon.Text))
-            {
-                await this.DisplayAlert("Advertencia", "El campo del Longitud es obligatorio.", "OK");
-               
             }else if(string.IsNullOrEmpty(txtDescripcion.Text))
             {
                 await this.DisplayAlert("Advertencia", "El campo del Descripcion es obligatorio.", "OK");
                
             }
-            else
+            else if (string.IsNullOrEmpty(txtLat.Text) && string.IsNullOrEmpty(txtLon.Text))
             {
+                await this.DisplayAlert("Advertencia", "No se puede agregar Registro. Faltan coordenadas.", "OK");
+
+                LoadCoord();
+
+            }else
+                {
                 var sitio = new Models.Sitios
                 {
                     id = 0,
@@ -69,28 +101,27 @@ namespace PM2E112
                     foto = ConvertImageToByteArray(),
                 };
 
-                await DisplayAlert("Aviso", "Sitio Adicionado" + sitio.foto, "OK");
+               // await DisplayAlert("Aviso", "Sitio Adicionado" + sitio.foto, "OK");
                 var result = await App.DBase.SitioSave(sitio);
 
                 if (result > 0)//se usa como una super clase
                 {
                     await DisplayAlert("Aviso", "Sitio Registrado", "OK");
+                    Clear();
+
                 }
                 else
                 {
                     await DisplayAlert("Aviso", "Error al Registrar", "OK");
                 }
             }
+
+         
         }
 
         private async void btnList_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ListSitios());
-        }
-
-        private void btnSalir_Clicked(object sender, EventArgs e)
-        {
-
         }
 
         private async void btnFoto_Clicked(object sender, EventArgs e)
@@ -104,7 +135,7 @@ namespace PM2E112
             });
 
 
-            await DisplayAlert("path directorio", Filefoto.Path, "ok");
+           // await DisplayAlert("path directorio", Filefoto.Path, "ok");
 
             if (Filefoto != null)
             {
@@ -119,17 +150,53 @@ namespace PM2E112
         {
             base.OnAppearing();
 
-           var location = await Geolocation.GetLastKnownLocationAsync();
+            LoadCoord();
+            try
+            {
+                var georequest = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
+                var tokendecancelacion = new System.Threading.CancellationTokenSource();
+                var location = await Geolocation.GetLocationAsync(georequest, tokendecancelacion.Token);
+                if (location != null)
+                {
 
-           if (location != null)
-           {
-            //    await DisplayAlert("AVISO", "lATITUD" + location.Latitude + " Longitude" + location.Longitude, "OK");
-                var lon = location.Longitude;
-                var lat = location.Latitude;
-              
-                txtLat.Text = lat.ToString();
-                txtLon.Text = lon.ToString();
-           }  
+                    var lon = location.Longitude;
+                    var lat = location.Latitude;
+
+                    txtLat.Text = lat.ToString();
+                    txtLon.Text = lon.ToString();
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                await DisplayAlert("Advertencia", "Este dispositivo no soporta GPS" + fnsEx, "Ok");
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                await DisplayAlert("Advertencia", "Error de Dispositivo, validar si su GPS esta activo", "Ok");
+                System.Diagnostics.Process.GetCurrentProcess().Kill(); //cerramos la aplicacion hasta que el usuario active el GPS
+
+            }
+            catch (PermissionException pEx)
+            {
+                await DisplayAlert("Advertencia", "Sin Permisos de Geolocalizacion" + pEx, "Ok");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Advertencia", "Sin Ubicacion " + ex, "Ok");
+            }
         }
+
+        private void btnSalir_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Clear()
+        {
+            txtLat.Text = "";
+            txtLon.Text = "";
+            txtDescripcion.Text = "";
+            //fotoSitio = null;
+         }
     }
 }

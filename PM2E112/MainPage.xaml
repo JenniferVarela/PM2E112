@@ -4,12 +4,12 @@
              x:Class="PM2E112.MainPage">
 
     <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+        <Frame BackgroundColor="Coral"  Padding="24" CornerRadius="0">
+            <Label Text="PM2E1-Jennifer Varela" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
         </Frame>
         
         <!--FOTO-->
-        <Image x:Name="fotoSitio" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="Aqua" />
+        <Image x:Name="fotoSitio" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="Gray"    Margin="5,0,5,5"/>
         <Button Text="Tomar Foto" x:Name="btnFoto" Clicked="btnFoto_Clicked"/>
         <!--DATOS-->
         <Label Text="Latitud"/>
