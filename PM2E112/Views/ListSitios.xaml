@@ -11,6 +11,11 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <ViewCell.ContextActions>
+                                <!--se declaran menus-->
+                                <!--<MenuItem x:Name="IrMapa" Clicked="IrMapa_Clicked"  CommandParameter="{Binding .}" Text="Ir a mapa" />-->
+                                <MenuItem x:Name="Eliminar" Clicked="Eliminar_Clicked" CommandParameter="{Binding .}" Text="Eliminar" IsDestructive="True"/>
+                             </ViewCell.ContextActions>
                             <Grid>
                                 <Label Grid.Column="0" Text="{Binding id}"/>
                                 <Label Grid.Column="1" Text="{Binding latitud}"/>

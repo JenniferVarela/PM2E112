@@ -23,20 +23,34 @@ namespace PM2E112.Views
         {
             base.OnAppearing();
           
-            var lat = mtxtLat.Text;
-            var lon = mtxtLon.Text;
+            var lat = Convert.ToDouble(mtxtLat.Text);
+            var lon = Convert.ToDouble(mtxtLon.Text);
+            var Nomsitio = nomSitio.Text;
 
+            var placemarks = await Geocoding.GetPlacemarksAsync(lat, lon);
 
-            var pin = new Pin()
+            var placemark = placemarks?.FirstOrDefault();
+            if (placemark != null)
             {
-                Position = new Position(Convert.ToDouble(lat), Convert.ToDouble(lon)),
-                Label = "Mi casa"
-            };
+                var geocodeAddress =
+                    $"Pais:     {placemark.CountryName}\n" +
+                    $"Depto:       {placemark.AdminArea}\n" +
+                    $"Ciudad:    {placemark.SubAdminArea}\n" +
+                    $"Colonia:        {placemark.Locality}\n" +
+                    $"Direccion:    {placemark.Thoroughfare}\n";
 
-            Mapa.Pins.Add(pin);
-            Mapa.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(Convert.ToDouble(lat), Convert.ToDouble(lon)), Distance.FromMeters(100.00)));
+                DisplayAlert("Ubicacion", geocodeAddress, "ok");
+                var pin = new Pin()
+                {
+                    Position = new Position(lat, lon),
+                    Label = Nomsitio,
 
+                };
 
+                Mapa.Pins.Add(pin);
+                Mapa.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(Convert.ToDouble(lat), Convert.ToDouble(lon)), Distance.FromMeters(100.00)));
+
+            }
         }
     }
 }

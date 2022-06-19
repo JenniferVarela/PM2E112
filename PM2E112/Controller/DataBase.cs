@@ -38,5 +38,17 @@ namespace PM2E112.Controller
         {
             return dbase.Table<Sitios>().ToListAsync();//se convierte el resultado a una lista.
         }
+
+        public async  Task<Sitios> getSitio(int pid)
+        {
+            return await dbase.Table<Sitios>()//se usa explesion lamba
+                .Where(i => i.id == pid)
+                .FirstOrDefaultAsync();
+        }
+
+        public async  Task<int> DeleteSitio(Sitios sitio)
+        {
+            return await dbase.DeleteAsync(sitio);
+        }
     }
 }

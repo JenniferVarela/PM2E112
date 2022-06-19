@@ -7,8 +7,7 @@
         <StackLayout>
             <Entry Text="{Binding latitud}" x:Name="mtxtLat" IsVisible="false"/>
             <Entry Text="{Binding longitud}" x:Name="mtxtLon" IsVisible="false"/>
-            <Label Text ="Sitio" FontSize="16"/>
-            <Label Text="{Binding descripcion}" FontSize="16" HorizontalOptions="Center"/>
+            <Label Text="{Binding descripcion}" FontSize="16" HorizontalOptions="Center" x:Name="nomSitio" IsVisible="false"/>
             <map:Map x:Name="Mapa"/>
         </StackLayout>
     </ContentPage.Content>
