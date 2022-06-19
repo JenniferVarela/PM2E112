@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PM2E112.Models;
+using System.Diagnostics;
+using Xamarin.Forms.Maps;
 
 namespace PM2E112.Views
 {
@@ -18,9 +20,21 @@ namespace PM2E112.Views
             InitializeComponent();
         }
 
-        private void ListSitio_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void ListSitio_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var sitio = (Sitios)e.Item;
+
+            bool answer = await DisplayAlert("AVISO", "¿Quiere ir al mapa?", "Si", "No");
+            Debug.WriteLine("Answer: " + answer);
+
+            if (answer == true)
+            {
+
+                Map map = new Map();
+                map.BindingContext = sitio;
+                await Navigation.PushAsync(map);
+            };
+
         }
         protected async override void OnAppearing()
         {
