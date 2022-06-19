@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Plugin.Geolocator;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +18,18 @@ namespace PM2E112.Views
         public Map()
         {
             InitializeComponent();
- 
         }
+
+        Plugin.Media.Abstractions.MediaFile Filefoto = null;
+
+        public object FOTO { get; private set; }
 
         protected async override void OnAppearing()
         {
+           
+
             base.OnAppearing();
-          
+
             var lat = Convert.ToDouble(mtxtLat.Text);
             var lon = Convert.ToDouble(mtxtLon.Text);
             var Nomsitio = nomSitio.Text;
@@ -48,9 +55,27 @@ namespace PM2E112.Views
                 };
 
                 Mapa.Pins.Add(pin);
-                Mapa.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(Convert.ToDouble(lat), Convert.ToDouble(lon)), Distance.FromMeters(100.00)));
+                Mapa.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(lat, lon), Distance.FromMeters(100.00)));
 
             }
+
+           
         }
+
+        private async void btn_Compartir_Clicked(object sender, EventArgs e)
+        {
+           
+            //var fn = "Attachment.txt";
+            //var file = Path.Combine(FileSystem.CacheDirectory, fn);
+            //File.WriteAllText(file, "Hello World");
+
+            //await Share.RequestAsync(new ShareFileRequest
+            //{
+            //    Title = Title,
+            //    File = new ShareFile(file)
+            //});
+
+        }
+
     }
 }

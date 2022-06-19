@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PM2E112.Controller;
 using System.IO;
+using Xamarin.Essentials;
 
 namespace PM2E112
 {
@@ -30,6 +31,8 @@ namespace PM2E112
 
             //MainPage = new MainPage();
             MainPage = new NavigationPage(new MainPage());
+
+            //ExperimentalFeatures.Enable(ExperimentalFeatures.ShareFileRequest);
         }
 
         protected override void OnStart()

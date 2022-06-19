@@ -9,6 +9,8 @@ using Plugin.Media;
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using PM2E112.Views;
+using System.IO;
+
 
 namespace PM2E112
 {
@@ -19,28 +21,66 @@ namespace PM2E112
             InitializeComponent();
         }
 
+        Plugin.Media.Abstractions.MediaFile Filefoto = null;
+
+        private Byte[] ConvertImageToByteArray()
+        {
+            if (Filefoto != null)
+            {
+                using (MemoryStream memory = new MemoryStream()) //Declaramos que nuestro archivo estara en memoria ram 
+                {
+                    Stream stream = Filefoto.GetStream();//se convierte a string
+                    stream.CopyTo(memory);//se copia en memoria
+                    return memory.ToArray();//se convierte el string en array
+                }
+
+            }
+            return null;
+
+        }
         private async void btnAdd_Clicked(object sender, EventArgs e)
         {
-            var sitio = new Models.Sitios
+            if(Filefoto ==null)
             {
-                id = 0,
-                latitud = txtLat.Text,
-                longitud = txtLon.Text,
-                descripcion = txtDescripcion.Text,
-                //foto
-            };
-
-            //await DisplayAlert("Aviso", "Sitio Adicionado"+sitio, "OK");
-            var result = await App.DBase.SitioSave(sitio);
-            if (result > 0)//se usa como una super clase
+                await this.DisplayAlert("Advertencia", "Debe tomar una foto", "OK");
+            }
+            else if (string.IsNullOrEmpty(txtLat.Text))
             {
-                await DisplayAlert("Aviso", "Sitio Adicionado",  "OK");
+                await this.DisplayAlert("Advertencia", "El campo del Latitud es obligatorio.", "OK");
+              
+            }
+            else if (string.IsNullOrEmpty(txtLon.Text))
+            {
+                await this.DisplayAlert("Advertencia", "El campo del Longitud es obligatorio.", "OK");
+               
+            }else if(string.IsNullOrEmpty(txtDescripcion.Text))
+            {
+                await this.DisplayAlert("Advertencia", "El campo del Descripcion es obligatorio.", "OK");
+               
             }
             else
             {
-                await DisplayAlert("Aviso", "Error al Registrar",  "OK");
-            }
+                var sitio = new Models.Sitios
+                {
+                    id = 0,
+                    latitud = txtLat.Text,
+                    longitud = txtLon.Text,
+                    descripcion = txtDescripcion.Text,
+                    foto = ConvertImageToByteArray(),
+                };
 
+                await DisplayAlert("Aviso", "Sitio Adicionado" + sitio.foto, "OK");
+                var result = await App.DBase.SitioSave(sitio);
+
+                if (result > 0)//se usa como una super clase
+                {
+                    await DisplayAlert("Aviso", "Sitio Registrado", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Aviso", "Error al Registrar", "OK");
+                }
+            }
         }
 
         private async void btnList_Clicked(object sender, EventArgs e)
@@ -55,7 +95,8 @@ namespace PM2E112
 
         private async void btnFoto_Clicked(object sender, EventArgs e)
         {
-            var fotografia = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            //var
+                Filefoto = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 Directory = "MisFotos",
                 Name = "test.jpg",
@@ -63,13 +104,13 @@ namespace PM2E112
             });
 
 
-            await DisplayAlert("path directorio", fotografia.Path, "ok");
+            await DisplayAlert("path directorio", Filefoto.Path, "ok");
 
-            if (fotografia != null)
+            if (Filefoto != null)
             {
                 fotoSitio.Source = ImageSource.FromStream(() =>
                 {
-                    return fotografia.GetStream();
+                    return Filefoto.GetStream();
                 });
             }
         }

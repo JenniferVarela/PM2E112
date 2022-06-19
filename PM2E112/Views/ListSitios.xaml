@@ -1,8 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Convertidor="clr-namespace:PM2E112.Converter" 
              x:Class="PM2E112.Views.ListSitios">
-    
+    <!--se declara recurso de pagina que se usa con la clase convertidor que creamos en el contenpage-->
+    <ContentPage.Resources>
+        <!--recurso de diccionario-->
+        <ResourceDictionary>
+            <!--se usa para disparar la funcion que ya tenemos-->
+            <Convertidor:ByteArrayToImage x:Key="ByteToImage"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
     <ContentPage.Content>
         <StackLayout>
 
@@ -21,6 +31,7 @@
                                 <Label Grid.Column="1" Text="{Binding latitud}"/>
                                 <Label Grid.Column="3" Text="{Binding longitud}"/>
                                 <Label Grid.Column="4" Text="{Binding descripcion}"/>
+                                <Image Source="{Binding foto, Converter={StaticResource ByteToImage}}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
